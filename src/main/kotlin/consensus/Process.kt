@@ -119,7 +119,7 @@ class Process(
     private fun handleDecideMessage(message: DecideMessage) {
         if (decision == null) {
             // logger.info("Process $id decide ${message.decision}")
-            auxActor.tell(DecideMessage(ballot, message.decision), self)
+            auxActor.tell(DecideMessage(ballot, id, message.decision), self)
         }
 
         decision = message.decision
@@ -128,7 +128,7 @@ class Process(
     private fun handleAckMessage() {
         ackReceived++
         if (isMajority(ackReceived)) {
-            sendAll(DecideMessage(ballot, proposal))
+            sendAll(DecideMessage(ballot, id, proposal))
         }
     }
 
