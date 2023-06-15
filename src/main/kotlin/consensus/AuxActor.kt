@@ -1,0 +1,46 @@
+package consensus
+
+import akka.actor.ActorRef
+import akka.actor.UntypedAbstractActor
+import akka.event.Logging
+import consensus.messages.AnswerMessage
+import consensus.messages.DecideMessage
+import consensus.messages.LaunchLeaderMessage
+import consensus.messages.LaunchMessage
+import java.time.LocalTime
+import java.time.LocalTime.now
+import kotlin.random.Random
+
+class AuxActor(private val processes: List<ActorRef>) : UntypedAbstractActor() {
+    private val logger = Logging.getLogger(context.system, this)
+
+    private var decision : Int? = null
+    private var launchTime : LocalTime? = null
+    private var decideTime : LocalTime? = null
+
+    override fun onReceive(message: Any?) {
+        when(message) {
+            is LaunchLeaderMessage -> handleLaunchMessage(message)
+            is DecideMessage -> handleDecideMessage(message)
+        }
+    }
+
+    private fun handleDecideMessage(message: DecideMessage) {
+        if (decideTime == null)
+            decideTime = now()
+
+        decision = message.decision
+    }
+
+    private fun handleLaunchMessage(message: LaunchLeaderMessage) {
+        if (launchTime == null)
+            launchTime = now()
+
+        sender.tell(AnswerMessage(decision, launchTime, decideTime), self)
+
+        if (decision == null) {
+            message.leader.tell(LaunchMessage(Random.nextInt(0, 2)), self)
+        }
+
+    }
+}
