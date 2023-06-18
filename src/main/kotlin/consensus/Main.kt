@@ -13,20 +13,19 @@ import java.time.LocalTime.now
 import kotlin.random.Random
 
 fun main() {
-    for (processCount in listOf(2000)) {
-        for (leaderElectionTime in listOf(500L)) {
+    for (processCount in listOf(1000, 1500, 2000, 2500, 3000)) {
+        for (leaderElectionTime in listOf(500L, 1000L, 1500L)) {
             var res = consensus(processCount, 0.0, leaderElectionTime, 15)
             println("Processes: $processCount, Election timeout: $leaderElectionTime, Consensus latency: $res ms")
-//            val res = consensus(processCount, 1.0, leaderElectionTime, 15)
-//            println("Processes: $processCount, Election timeout: $leaderElectionTime, Consensus latency: $res ms")
         }
     }
-//    for (processCount in listOf(500, 1000, 2000)) {
-//        for (leaderElectionTime in listOf(500L, 1000L, 1500L)) {
-//            val res = consensus(processCount, 0.0, leaderElectionTime, 15)
-//            println("Processes: $processCount, Election timeout: $leaderElectionTime, Consensus latency: $res ms")
-//        }
-//    }
+
+    for (processCount in listOf(2000)) {
+        for (chanceToCrash in listOf(0.0, 0.1, 0.3, 0.5, 0.7, 1.0)) {
+            val res = consensus(processCount, chanceToCrash, 500L, 15)
+            println("Processes: $processCount, Chance to crash: $chanceToCrash, Consensus latency: $res ms")
+        }
+    }
 }
 
 private fun consensus(
@@ -35,8 +34,6 @@ private fun consensus(
     leaderElectionTimeoutMillis: Long,
     iterationCount: Int
 ): Long {
-    val seed = processCount + leaderElectionTimeoutMillis + iterationCount
-
     val badProcessCount = processCount / 2 - 1
 
     val timeout: Timeout = Timeout.create(Duration.ofSeconds(150))
@@ -61,21 +58,18 @@ private fun consensus(
 
         var lastElection = now()
 
-        var leaderId = Random(seed).nextInt(badProcessCount, processCount)
+        var leaderId = Random.nextInt(badProcessCount, processCount)
         var leader = actors[leaderId]
 
         while (true) {
             val nowTime = now()
-//            println(Duration.between(lastElection, nowTime).toMillis())
+
             if (Duration.between(lastElection, nowTime).toMillis() > leaderElectionTimeoutMillis) {
                 lastElection = nowTime
-                leaderId = Random(seed).nextInt(badProcessCount, processCount)
+                leaderId = Random.nextInt(badProcessCount, processCount)
                 leader = actors[leaderId]
-
-                // println("Process $leaderId was aborted or a new leader now")
             }
 
-//            Patterns.ask(leader, LaunchMessage(Random(seed).nextInt(0, 2)), timeout)
             val message =
                 Await.result(
                     Patterns.ask(auxActor, LaunchLeaderMessage(leader), timeout),
@@ -86,8 +80,6 @@ private fun consensus(
                 val timeToDecide = Duration.between(message.launchTime, message.decideTime).toMillis()
                 sumDecideTime += timeToDecide
 
-                // println("Time to decide: $timeToDecide ms, Decision: ${message.decision}")
-//                println()
                 break
             }
 
@@ -95,9 +87,6 @@ private fun consensus(
         }
 
         system.terminate()
-//        actors.forEach {
-//            system.stop(it)
-//        }
     }
 
     return sumDecideTime / iterationCount

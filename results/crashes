@@ -1,0 +1,6 @@
+Processes: 2000, Chance to crash: 0.0, Consensus latency: 2360 ms
+Processes: 2000, Chance to crash: 0.1, Consensus latency: 675 ms
+Processes: 2000, Chance to crash: 0.3, Consensus latency: 517 ms
+Processes: 2000, Chance to crash: 0.5, Consensus latency: 332 ms
+Processes: 2000, Chance to crash: 0.7, Consensus latency: 201 ms
+Processes: 2000, Chance to crash: 1.0, Consensus latency: 22 ms

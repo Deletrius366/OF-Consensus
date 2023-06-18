@@ -33,8 +33,6 @@ class Process(
     private var senderRef: ActorRef? = null
 
     override fun onReceive(message: Any?) {
-//        if (id == 0 && message is DecideMessage)
-//            logger.info("Received Decide message, decision: ${message.decision}")
         tryToCrash()
 
         if (crashed)
@@ -83,8 +81,6 @@ class Process(
 
     private fun handleAbortMessage() {
         aborted = true
-
-        // self.tell(LaunchMessage(Random.nextInt(0, 2)), null)
     }
 
     private fun handleReadMessage(message: ReadMessage) {
@@ -100,7 +96,6 @@ class Process(
         if (sender != null)
             senderRef = sender
 
-        // logger.info("Decision: $decision, Aborted: $aborted")
         if (decision != null) {
             return
         }
@@ -118,7 +113,6 @@ class Process(
 
     private fun handleDecideMessage(message: DecideMessage) {
         if (decision == null) {
-            // logger.info("Process $id decide ${message.decision}")
             auxActor.tell(DecideMessage(ballot, id, message.decision), self)
         }
 

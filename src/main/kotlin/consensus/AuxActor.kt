@@ -8,7 +8,6 @@ import consensus.messages.LaunchLeaderMessage
 import consensus.messages.LaunchMessage
 import java.time.LocalTime
 import java.time.LocalTime.now
-import kotlin.math.log
 import kotlin.random.Random
 
 class AuxActor(private val processCount : Int) : UntypedAbstractActor() {
@@ -31,7 +30,7 @@ class AuxActor(private val processCount : Int) : UntypedAbstractActor() {
             decideTime = now()
 
         if (decision != null) {
-            // logger.warning("Received decision from process ${message.processId}")
+            logger.warning("Received decision from process ${message.processId}")
 
             assert(decision == message.decision)
 

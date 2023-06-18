@@ -1,0 +1,15 @@
+Processes: 1000, Election timeout: 500, Consensus latency: 270 ms
+Processes: 1000, Election timeout: 1000, Consensus latency: 216 ms
+Processes: 1000, Election timeout: 1500, Consensus latency: 208 ms
+Processes: 1500, Election timeout: 500, Consensus latency: 834 ms
+Processes: 1500, Election timeout: 1000, Consensus latency: 534 ms
+Processes: 1500, Election timeout: 1500, Consensus latency: 496 ms
+Processes: 2000, Election timeout: 500, Consensus latency: 2398 ms
+Processes: 2000, Election timeout: 1000, Consensus latency: 1950 ms
+Processes: 2000, Election timeout: 1500, Consensus latency: 1322 ms
+Processes: 2500, Election timeout: 500, Consensus latency: 5646 ms
+Processes: 2500, Election timeout: 1000, Consensus latency: 4434 ms
+Processes: 2500, Election timeout: 1500, Consensus latency: 3480 ms
+Processes: 3000, Election timeout: 500, Consensus latency: 11587 ms
+Processes: 3000, Election timeout: 1000, Consensus latency: 10079 ms
+Processes: 3000, Election timeout: 1500, Consensus latency: 9158 ms
